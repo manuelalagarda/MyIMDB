@@ -1,0 +1,1 @@
+"C:\Program Files\Sonar\sonar-scanner\bin\sonar-runner.bat"
