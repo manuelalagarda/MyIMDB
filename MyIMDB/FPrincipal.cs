@@ -13,68 +13,44 @@ namespace MyIMDB
 {
     public partial class FPrincipal : Form
     {
-        IList listaElementos;
+        IList<Elemento> listaElementos;
 
         public FPrincipal()
         {
             InitializeComponent();
-            listaElementos = new ArrayList();
+            listaElementos = new List<Elemento>();
 
-            Elemento elemento = new Elemento();
-            elemento.Id = DateTime.Now.Ticks;
-            elemento.Tipo = "Peliculas";
-            elemento.Campo1 = "Los siete magníficos";
-            elemento.Campo2 = "2016";
-            elemento.Campo3 = "Bla bla bla";
-            listaElementos.Add(elemento);
+            CargarPeliculasIniciales();
 
-            elemento = new Elemento();
-            elemento.Id = DateTime.Now.Ticks;
-            elemento.Tipo = "Peliculas";
-            elemento.Campo1 = "Bridget Jones' baby";
-            elemento.Campo2 = "2016";
-            elemento.Campo3 = "Bla bla bla";
-            listaElementos.Add(elemento);
+        }
 
-            elemento = new Elemento();
-            elemento.Id = DateTime.Now.Ticks;
-            elemento.Tipo = "Peliculas";
-            elemento.Campo1 = "El hombre de las mil caras";
-            elemento.Campo2 = "2016";
-            elemento.Campo3 = "Bla bla bla";
-            listaElementos.Add(elemento);
+        private void CargarPeliculasIniciales()
+        {
+            InsertarPelicula("Los siete magníficos", "2016", "Bla bla bla");
+            InsertarPelicula("Bridget Jones' baby", "2016", "Bla bla bla");
+            InsertarPelicula("El hombre de las mil caras", "2016", "Bla bla bla");
+            InsertarPelicula("Cuerpo de élite", "2016", "Bla bla bla");
+            InsertarPelicula("No respires", "2016", "Bla bla bla");
+            InsertarPelicula("Florence Foster Jenkins", "2016", "Bla bla bla");
+            InsertarPelicula("El hogar de Miss Peregrine para niños peculiares", "2016", "Bla bla bla");
+        }
 
-            elemento = new Elemento();
-            elemento.Id = DateTime.Now.Ticks;
-            elemento.Tipo = "Peliculas";
-            elemento.Campo1 = "Cuerpo de élite";
-            elemento.Campo2 = "2016";
-            elemento.Campo3 = "Bla bla bla";
+        private void InsertarPelicula(string titulo, string año, string argumento)
+        {
+            Elemento elemento = new Elemento
+            {
+                Id= ObtenerSiguienteID(),
+                Tipo = "Peliculas",
+                Campo1 = titulo,
+                Campo2 = año,
+                Campo3 = argumento
+            };
             listaElementos.Add(elemento);
+        }
 
-            elemento = new Elemento();
-            elemento.Id = DateTime.Now.Ticks;
-            elemento.Tipo = "Peliculas";
-            elemento.Campo1 = "No respires";
-            elemento.Campo2 = "2016";
-            elemento.Campo3 = "Bla bla bla";
-            listaElementos.Add(elemento);
-
-            elemento = new Elemento();
-            elemento.Id = DateTime.Now.Ticks;
-            elemento.Tipo = "Peliculas";
-            elemento.Campo1 = "Florence Foster Jenkins";
-            elemento.Campo2 = "2016";
-            elemento.Campo3 = "Bla bla bla";
-            listaElementos.Add(elemento);
-
-            elemento = new Elemento();
-            elemento.Id = DateTime.Now.Ticks;
-            elemento.Tipo = "Peliculas";
-            elemento.Campo1 = "El hogar de Miss Peregrine para niños peculiares";
-            elemento.Campo2 = "2016";
-            elemento.Campo3 = "Bla bla bla";
-            listaElementos.Add(elemento);
+        private long ObtenerSiguienteID()
+        {
+            return DateTime.Now.Ticks;
         }
 
         private void FMain_Load(object sender, EventArgs e)
@@ -91,69 +67,28 @@ namespace MyIMDB
             // Si tenemos datos de una nueva película
             if (ventana.titulo.Length >0)
             {
-                // Creamos nuevo elemento
-                Elemento pel = new Elemento();
-                pel.Id = DateTime.Now.Ticks;
-                pel.Tipo = "Peliculas";
-                pel.Campo1 = ventana.titulo;
-                pel.Campo2 = ventana.año;
-                pel.Campo3 = ventana.argumento;
-                // Lo añadimos a la lista
-                listaElementos.Add(pel);
+                InsertarPelicula(ventana.titulo, ventana.año, ventana.argumento);               
             }
 
         }
 
         private void cmdBuscar_Click(object sender, EventArgs e)
         {
-            IList lis = new ArrayList();
+            IList<Elemento> elementosFiltrados = ObtenerListaFiltradaDeElementos(cmbTipoFiltro.Text, txtFiltro.Text);
+            lstResultado.DataSource = elementosFiltrados;
+        }
 
-            if (cmbTipoFiltro.Text == "Todos")
-            {
-                foreach (Elemento elemento in listaElementos)
-                {
-                    if (elemento.Campo1.Contains(txtFiltro.Text))
-                    {
-                        lis.Add(elemento);
-                    }
-                }
-            } else
-            {
-                if (cmbTipoFiltro.Text == "Peliculas")
-                {
-                    foreach (Elemento elemento in listaElementos)
-                    {
-                        if (elemento.Tipo == "Peliculas" && elemento.Campo1.Contains(txtFiltro.Text))
-                        {
-                            lis.Add(elemento);
-                        }
-                    }
-                }
+        private IList<Elemento> ObtenerListaFiltradaDeElementos(string text1, string text2)
+        {
+            IList<Elemento> elementosFiltrados;
 
-                if (cmbTipoFiltro.Text == "Series")
-                {
-                    foreach (Elemento elemento in listaElementos)
-                    {
-                        if (elemento.Tipo == "Series" && elemento.Campo1.Contains(txtFiltro.Text))
-                        {
-                            lis.Add(elemento);
-                        }
-                    }
-                }
+            elementosFiltrados = (listaElementos
+                                    .Where<Elemento>(elemento =>
+                                                        (cmbTipoFiltro.Text == "Todos" && elemento.Campo1.Contains(txtFiltro.Text)) ||
+                                                        (elemento.Tipo == cmbTipoFiltro.Text && elemento.Campo1.Contains(txtFiltro.Text)))
+                                                    ).ToList<Elemento>();
+            return elementosFiltrados;
 
-                if (cmbTipoFiltro.Text == "Actores")
-                {
-                    foreach (Elemento elemento in listaElementos)
-                    {
-                        if (elemento.Tipo == "Actores" && elemento.Campo1.Contains(txtFiltro.Text))
-                        {
-                            lis.Add(elemento);
-                        }
-                    }
-                }
-            }
-
-            lstResultado.DataSource = lis;
         }
 
         private void cmdNuevoDirector_Click(object sender, EventArgs e)
