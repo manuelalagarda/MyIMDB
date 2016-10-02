@@ -47,7 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actor.cs" />
+    <Compile Include="ActoresRepository.cs" />
+    <Compile Include="BaseRepository.cs" />
     <Compile Include="ElementoListaDTO.cs" />
+    <Compile Include="PeliculasRepository.cs" />
     <Compile Include="Serie.cs" />
     <Compile Include="FActor.cs">
       <SubType>Form</SubType>
@@ -76,6 +79,7 @@
     <Compile Include="Pelicula.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SeriesRepository.cs" />
     <EmbeddedResource Include="FActor.resx">
       <DependentUpon>FActor.cs</DependentUpon>
     </EmbeddedResource>

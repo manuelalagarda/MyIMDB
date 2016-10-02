@@ -13,47 +13,10 @@ namespace MyIMDB
 {
     public partial class FPrincipal : Form
     {
-        IList<Pelicula> listaPeliculas;
-        IList<Serie> listaSeries;
-        IList<Actor> listaActores;
-
+       
         public FPrincipal()
         {
             InitializeComponent();
-            listaPeliculas = new List<Pelicula>();
-            listaSeries = new List<Serie>();
-            listaActores = new List<Actor>();
-
-            CargarPeliculasIniciales();
-
-        }
-
-        private void CargarPeliculasIniciales()
-        {
-            InsertarPelicula("Los siete magníficos", "2016", "Bla bla bla");
-            InsertarPelicula("Bridget Jones' baby", "2016", "Bla bla bla");
-            InsertarPelicula("El hombre de las mil caras", "2016", "Bla bla bla");
-            InsertarPelicula("Cuerpo de élite", "2016", "Bla bla bla");
-            InsertarPelicula("No respires", "2016", "Bla bla bla");
-            InsertarPelicula("Florence Foster Jenkins", "2016", "Bla bla bla");
-            InsertarPelicula("El hogar de Miss Peregrine para niños peculiares", "2016", "Bla bla bla");
-        }
-
-        private void InsertarPelicula(string titulo, string año, string argumento)
-        {
-            Pelicula pelicula = new Pelicula
-            {
-                Id= ObtenerSiguienteID(),
-                Titulo = titulo,
-                Año = año,
-                Argumento = argumento
-            };
-            listaPeliculas.Add(pelicula);
-        }
-
-        private long ObtenerSiguienteID()
-        {
-            return DateTime.Now.Ticks;
         }
 
         private void FMain_Load(object sender, EventArgs e)
@@ -70,7 +33,14 @@ namespace MyIMDB
             // Si tenemos datos de una nueva película
             if (ventana.titulo.Length >0)
             {
-                InsertarPelicula(ventana.titulo, ventana.año, ventana.argumento);               
+                Pelicula pelicula = new Pelicula
+                {
+                    Id = DateTime.Now.Ticks,
+                    Titulo = ventana.titulo,
+                    Año = ventana.año,
+                    Argumento = ventana.argumento
+                };
+                PeliculasRepository.Instance.AddPelicula(pelicula);
             }
 
         }
@@ -100,10 +70,8 @@ namespace MyIMDB
         {
             IEnumerable<ElementoListaDTO> elementos;
 
-            elementos = (from pelicula in listaPeliculas
-                         where
-                             (pelicula.Titulo.Contains(filtro))
-                         select new ElementoListaDTO { Id = pelicula.Id, Tipo = "Peliculas", Campo1 = pelicula.Titulo });
+            elementos = (from serie in PeliculasRepository.Instance.ObtenerPeliculasPorFiltro(filtro)
+                         select new ElementoListaDTO { Id = serie.Id, Tipo = "Peliculas", Campo1 = serie.Titulo });
 
             return elementos;
         }
@@ -112,9 +80,7 @@ namespace MyIMDB
         {
             IEnumerable<ElementoListaDTO> elementos;
 
-            elementos = (from serie in listaSeries
-                         where
-                             (serie.Titulo.Contains(filtro))
+            elementos = (from serie in SeriesRepository.Instance.ObtenerSeriesPorFiltro(filtro)
                          select new ElementoListaDTO { Id = serie.Id, Tipo = "Series", Campo1 = serie.Titulo });
 
             return elementos;
@@ -124,9 +90,7 @@ namespace MyIMDB
         {
             IEnumerable<ElementoListaDTO> elementos;
 
-            elementos = (from actor in listaActores
-                         where
-                             (actor.Nombre.Contains(filtro))
+            elementos = (from actor in ActoresRepository.Instance.ObtenerActoresPorFiltro(filtro)
                          select new ElementoListaDTO { Id = actor.Id, Tipo = "Actores", Campo1 = actor.Nombre });
 
             return elementos;
@@ -142,13 +106,13 @@ namespace MyIMDB
             if (ventana.nombre.Length > 0)
             {
                 // Creamos nuevo elemento
-                Actor dir = new Actor();
-                dir.Id = DateTime.Now.Ticks;                
-                dir.Nombre = ventana.nombre;
-                dir.FechaNacimiento = ventana.fechaNacimiento;
-                dir.Biografia = ventana.biografia;
+                Actor actor = new Actor();
+                actor.Id = DateTime.Now.Ticks;
+                actor.Nombre = ventana.nombre;
+                actor.FechaNacimiento = ventana.fechaNacimiento;
+                actor.Biografia = ventana.biografia;
                 // Lo añadimos a la lista
-                listaActores.Add(dir);
+                ActoresRepository.Instance.AddActor(actor);
             }
         }
 
@@ -171,7 +135,7 @@ namespace MyIMDB
                 {
                     case "Peliculas":
                         {
-                            Pelicula peliculaSeleccionada = listaPeliculas.Where<Pelicula>(pelicula => pelicula.Id == id).FirstOrDefault<Pelicula>();
+                            Pelicula peliculaSeleccionada = PeliculasRepository.Instance.GetPeliculaPorId(id);
                             // Mostramos el formulario
                             FPelicula form = new FPelicula();
                             form.id = peliculaSeleccionada.Id;
@@ -187,7 +151,7 @@ namespace MyIMDB
                         }
                     case "Series":
                         {
-                            Serie serieSeleccionada = listaSeries.Where<Serie>(serie => serie.Id == id).FirstOrDefault<Serie>();
+                            Serie serieSeleccionada = SeriesRepository.Instance.GetSeriePorId(id);
                             // Mostramos el formulario
                             FSerie form = new FSerie();
                             form.id = serieSeleccionada.Id;
@@ -205,7 +169,7 @@ namespace MyIMDB
                         }
                     case "Actores":
                         {
-                            Actor actorSeleccionado = listaActores.Where<Actor>(actor => actor.Id == id).FirstOrDefault<Actor>();
+                            Actor actorSeleccionado = ActoresRepository.Instance.GetActorPorId(id);
                             FActor form = new FActor();
                             form.id = actorSeleccionado.Id;
                             form.nombre = actorSeleccionado.Nombre;
@@ -239,7 +203,7 @@ namespace MyIMDB
                 serie.FechaFin = ventana.fechaFin;
                 serie.Argumento = ventana.argumento;
                 // Lo añadimos a la lista
-                listaSeries.Add(serie);
+                SeriesRepository.Instance.AddSerie(serie);
             }
         }
     }
