@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace MyIMDB
 {
-    public class Elemento
+    public class ElementoListaDTO
     {
         public long Id { get; set; }
         public String Tipo { get; set; }
         public String Campo1 { get; set; }
-        public String Campo2 { get; set; }
-        public String Campo3 { get; set; }
-        public String Campo4 { get; set; }
     }
 }
