@@ -1,51 +1,70 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MyIMDB
 {
     public partial class FPelicula : Form
     {
-        public long id = 0;
-        public String titulo;
-        public String año;
-        public String argumento;
+
+        private Boolean esAlta = false;
+        private Pelicula pelicula = null;
 
         public FPelicula()
         {
             InitializeComponent();
         }
 
-        protected override void OnShown(EventArgs e)
+        public void CrearNuevaPelicula()
         {
-            txtTitulo.Text = titulo;
-            txtAño.Text = año;
-            txtArgumento.Text = argumento;
+            esAlta = true;
+            pelicula = new Pelicula
+            {
+                Id = DateTime.Now.Ticks,
+            };
+            ShowDialog();
+        }
+
+        public void Editar(long id)
+        {
+            pelicula = PeliculasRepository.Instance.GetPeliculaPorId(id);
+            MostrarDatos(pelicula);
+            ShowDialog();
         }
 
         private void cmdGuardar_Click(object sender, EventArgs e)
         {
-            titulo = txtTitulo.Text;
-            año = txtAño.Text;
-            argumento = txtArgumento.Text;
+            if (EstanDatosObligatoriosRellenados())
+            {
+                ActualizarDatos(pelicula);
+                if (esAlta)
+                    PeliculasRepository.Instance.AddPelicula(pelicula);
+            }
+
             this.Close();
         }
 
         private void cmdCancelar_Click(object sender, EventArgs e)
         {
-            if (id == 0)
-            {
-                titulo = "";
-                año = "";
-                argumento = "";
-            }
             this.Close();
+        }
+
+        private bool EstanDatosObligatoriosRellenados()
+        {
+            return txtTitulo.Text.Trim().Length > 0;
+        }
+
+        private void ActualizarDatos(Pelicula pelicula)
+        {
+            pelicula.Titulo = txtTitulo.Text;
+            pelicula.Año = txtAño.Text;
+            pelicula.Argumento = txtArgumento.Text;
+        }
+
+        private void MostrarDatos(Pelicula pelicula)
+        {
+            txtTitulo.Text = pelicula.Titulo;
+            txtAño.Text = pelicula.Año;
+            txtArgumento.Text = pelicula.Argumento;
         }
     }
 }

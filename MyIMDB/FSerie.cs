@@ -1,56 +1,72 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MyIMDB
 {
     public partial class FSerie : Form
     {
-        public long id = 0;
-        public string titulo;
-        public string fechaInicio;
-        public string fechaFin;
-        public string argumento;       
+
+        private Boolean esAlta = false;
+        private Serie serie = null;
 
         public FSerie()
         {
             InitializeComponent();
         }
 
-        protected override void OnShown(EventArgs e)
+        public void CrearNuevaSerie()
         {
-            txtTitulo.Text = titulo;
-            txtFechaInicio.Text = fechaInicio;
-            txtFechaFin.Text = fechaFin;
-            txtArgumento.Text = argumento;
+            esAlta = true;
+            serie = new Serie()
+            {
+                Id = DateTime.Now.Ticks,
+            };
+            ShowDialog();
+        }
+
+        public void Editar(long id)
+        {
+            serie = SeriesRepository.Instance.GetSeriePorId(id);
+            MostrarDatos(serie);
+            ShowDialog();
         }
 
         private void cmdGuardar_Click(object sender, EventArgs e)
         {
-            titulo = txtTitulo.Text;
-            fechaInicio = txtFechaInicio.Text;
-            fechaFin = txtFechaFin.Text;
-            argumento = txtArgumento.Text;
+            if (EstanDatosObligatoriosRellenados())
+            {
+                ActualizarDatos(serie);
+                if (esAlta)
+                    SeriesRepository.Instance.AddSerie(serie);
+            }
 
             this.Close();
         }
 
         private void cmdCancelar_Click(object sender, EventArgs e)
         {
-            if (id == 0)
-            {
-                titulo = "";
-                fechaInicio = "";
-                fechaFin = "";
-                argumento = "";
-            }
             this.Close();
+        }
+
+        private bool EstanDatosObligatoriosRellenados()
+        {
+            return txtTitulo.Text.Trim().Length > 0;
+        }
+
+        private void ActualizarDatos(Serie serie)
+        {
+            serie.Titulo = txtTitulo.Text;
+            serie.FechaInicio = txtFechaInicio.Text;
+            serie.FechaFin = txtFechaFin.Text;
+            serie.Argumento = txtArgumento.Text;
+        }
+
+        private void MostrarDatos(Serie serie)
+        {
+            txtTitulo.Text = serie.Titulo;
+            txtFechaInicio.Text = serie.FechaInicio;
+            txtFechaFin.Text = serie.FechaFin;
+            txtArgumento.Text = serie.Argumento;
         }
 
     }
