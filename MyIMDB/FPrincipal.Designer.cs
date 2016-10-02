@@ -40,7 +40,7 @@
             this.campo1DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Tipo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.elementoBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.cmdNuevoDirector = new System.Windows.Forms.Button();
+            this.cmdNuevaSerie = new System.Windows.Forms.Button();
             this.cmdNuevoActor = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.lstResultado)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.elementoBindingSource)).BeginInit();
@@ -166,20 +166,20 @@
             // 
             // elementoBindingSource
             // 
-            this.elementoBindingSource.DataSource = typeof(MyIMDB.Elemento);
+            this.elementoBindingSource.DataSource = typeof(MyIMDB.ElementoListaDTO);
             // 
-            // cmdNuevoDirector
+            // cmdNuevaSerie
             // 
-            this.cmdNuevoDirector.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(221)))), ((int)(((byte)(221)))), ((int)(((byte)(19)))));
-            this.cmdNuevoDirector.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdNuevoDirector.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdNuevoDirector.Location = new System.Drawing.Point(819, 129);
-            this.cmdNuevoDirector.Name = "cmdNuevoDirector";
-            this.cmdNuevoDirector.Size = new System.Drawing.Size(111, 26);
-            this.cmdNuevoDirector.TabIndex = 8;
-            this.cmdNuevoDirector.Text = "Nueva serie";
-            this.cmdNuevoDirector.UseVisualStyleBackColor = false;
-            this.cmdNuevoDirector.Click += new System.EventHandler(this.cmdNuevoDirector_Click);
+            this.cmdNuevaSerie.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(221)))), ((int)(((byte)(221)))), ((int)(((byte)(19)))));
+            this.cmdNuevaSerie.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdNuevaSerie.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdNuevaSerie.Location = new System.Drawing.Point(819, 129);
+            this.cmdNuevaSerie.Name = "cmdNuevaSerie";
+            this.cmdNuevaSerie.Size = new System.Drawing.Size(111, 26);
+            this.cmdNuevaSerie.TabIndex = 8;
+            this.cmdNuevaSerie.Text = "Nueva serie";
+            this.cmdNuevaSerie.UseVisualStyleBackColor = false;
+            this.cmdNuevaSerie.Click += new System.EventHandler(this.cmdNuevaSerie_Click);
             // 
             // cmdNuevoActor
             // 
@@ -199,9 +199,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(961, 462);
+            this.ClientSize = new System.Drawing.Size(961, 461);
             this.Controls.Add(this.cmdNuevoActor);
-            this.Controls.Add(this.cmdNuevoDirector);
+            this.Controls.Add(this.cmdNuevaSerie);
             this.Controls.Add(this.lstResultado);
             this.Controls.Add(this.cmdEditar);
             this.Controls.Add(this.cmdNuevaPelicula);
@@ -233,9 +233,8 @@
         private System.Windows.Forms.Button cmdNuevaPelicula;
         private System.Windows.Forms.Button cmdEditar;
         private System.Windows.Forms.DataGridView lstResultado;
-        private System.Windows.Forms.Button cmdNuevoDirector;
-        private System.Windows.Forms.Button cmdNuevoActor;
-        private System.Windows.Forms.DataGridViewTextBoxColumn codigoDataGridViewTextBoxColumn;
+        private System.Windows.Forms.Button cmdNuevaSerie;
+        private System.Windows.Forms.Button cmdNuevoActor;        
         private System.Windows.Forms.BindingSource elementoBindingSource;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id;
         private System.Windows.Forms.DataGridViewTextBoxColumn campo1DataGridViewTextBoxColumn;

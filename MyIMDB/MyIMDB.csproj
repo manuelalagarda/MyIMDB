@@ -46,7 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Elemento.cs" />
+    <Compile Include="Actor.cs" />
+    <Compile Include="ElementoListaDTO.cs" />
+    <Compile Include="Serie.cs" />
     <Compile Include="FActor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,6 +73,7 @@
     <Compile Include="FPrincipal.Designer.cs">
       <DependentUpon>FPrincipal.cs</DependentUpon>
     </Compile>
+    <Compile Include="Pelicula.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FActor.resx">
