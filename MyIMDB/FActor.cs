@@ -13,43 +13,67 @@ namespace MyIMDB
     public partial class FActor : Form
     {
 
-        public long id = 0;
-        public string nombre;
-        public string fechaNacimiento;
-        public string biografia;
+        private Boolean esAlta = false;
+        private Actor actor = null;
 
         public FActor()
         {
             InitializeComponent();
         }
 
-        protected override void OnShown(EventArgs e)
+        public void CrearNuevoActor()
         {
-            txtNombre.Text = nombre;
-            txtFechaNacimiento.Text = fechaNacimiento;
-            txtBiografia.Text = biografia;
+            esAlta = true;
+            actor = new Actor
+            {
+                Id = DateTime.Now.Ticks,
+            };
+            ShowDialog();
+        }
+
+        public void Editar(long id)
+        {
+            actor = ActoresRepository.Instance.GetActorPorId(id);
+            MostrarDatos(actor);
+            ShowDialog();
         }
 
         private void cmdGuardar_Click(object sender, EventArgs e)
         {
-            nombre = txtNombre.Text;
-            fechaNacimiento = txtFechaNacimiento.Text;
-            biografia = txtBiografia.Text;
+            if (EstanDatosObligatoriosRellenados())
+            {
+                ActualizarDatos(actor);
+                if (esAlta)
+                    ActoresRepository.Instance.AddActor(actor);
+            }
 
             this.Close();
         }
 
         private void cmdCancelar_Click(object sender, EventArgs e)
         {
-            if (id == 0)
-            {
-                nombre = "";
-                fechaNacimiento = "";
-                biografia = "";
-            }
-
             this.Close();
         }
+
+        private bool EstanDatosObligatoriosRellenados()
+        {
+            return txtNombre.Text.Trim().Length > 0;
+        }
+
+        private void ActualizarDatos(Actor actor)
+        {
+            actor.Nombre = txtNombre.Text;
+            actor.FechaNacimiento = txtFechaNacimiento.Text;
+            actor.Biografia = txtBiografia.Text;
+        }
+
+        private void MostrarDatos(Actor actor)
+        {
+            txtNombre.Text = actor.Nombre;
+            txtFechaNacimiento.Text = actor.FechaNacimiento;
+            txtBiografia.Text = actor.Biografia;                
+        }
+
 
     }
 
